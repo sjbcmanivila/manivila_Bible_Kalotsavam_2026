@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>കലോൽസവം — St. John The Baptist RC Church, Manivila</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #f59e0b;
+    --border: #334155;
+    --live: #ef4444;
+    --finished: #64748b;
+    --upcoming: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 60px;
+  }
+  header {
+    text-align: center;
+    padding: 28px 16px 18px;
+    background: linear-gradient(180deg, #1e293b, #0f172a);
+    border-bottom: 1px solid var(--border);
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #1c1300;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  header h1 { margin: 0 0 4px; font-size: 1.6rem; }
+  header p { margin: 0; color: var(--muted); font-size: 0.85rem; }
+  .status-note { text-align: center; color: var(--muted); font-size: 0.78rem; margin: 10px 0 0; }
+  .status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; margin-right: 5px; }
+  nav { display: flex; justify-content: center; gap: 8px; padding: 16px; flex-wrap: wrap; }
+  nav button {
+    padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text); font-size: 0.85rem; cursor: pointer;
+  }
+  nav button.active { background: var(--accent); color: #1c1300; border-color: var(--accent); font-weight: 700; }
+  main { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .house-card {
+    background: var(--card-bg); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 14px; border-left: 6px solid var(--house-color, var(--accent));
+  }
+  .house-rank { font-size: 1.3rem; font-weight: 800; color: var(--muted); width: 28px; }
+  .house-info { flex: 1; }
+  .house-info .name { font-weight: 700; font-size: 1.05rem; }
+  .house-points { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+
+  .item-card { background: var(--card-bg); border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid var(--border); }
+  .item-top { display: flex; justify-content: space-between; align-items: center; }
+  .item-name { font-weight: 700; }
+  .item-type { color: var(--muted); font-size: 0.75rem; text-transform: capitalize; }
+  .badge-status { padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+  .badge-status.live { background: rgba(239,68,68,0.15); color: var(--live); }
+  .badge-status.finished { background: rgba(100,116,139,0.15); color: var(--finished); }
+  .badge-status.upcoming { background: rgba(59,130,246,0.15); color: var(--upcoming); }
+  .item-results { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.85rem; }
+  .item-results .res-row { display: flex; justify-content: space-between; padding: 3px 0; color: var(--muted); }
+  .item-results .res-row .pos { color: var(--accent); font-weight: 700; margin-right: 6px; }
+
+  .search-box {
+    width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text); font-size: 0.95rem; margin-bottom: 16px;
+  }
+  .search-section h3 { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 18px 0 8px; }
+  .search-row { background: var(--card-bg); border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.9rem; }
+  .search-row .sub { color: var(--muted); font-size: 0.78rem; }
+  .empty { text-align: center; color: var(--muted); padding: 30px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Live Results</div>
+  <h1>കലോൽസവം</h1>
+  <p>St. John The Baptist Roman Catholic Church, Manivila</p>
+  <div class="status-note"><span class="status-dot" id="statusDot"></span><span id="statusText">Connecting…</span></div>
+</header>
+
+<nav>
+  <button class="active" data-view="scoreboard">🏆 Scoreboard</button>
+  <button data-view="items">📋 Items</button>
+  <button data-view="search">🔍 Search</button>
+</nav>
+
+<main>
+  <div class="view active" id="view-scoreboard">
+    <div id="scoreboardList"><div class="empty">Loading…</div></div>
+  </div>
+
+  <div class="view" id="view-items">
+    <div id="itemsList"><div class="empty">Loading…</div></div>
+  </div>
+
+  <div class="view" id="view-search">
+    <input type="text" class="search-box" id="searchInput" placeholder="Search participant, house, or item…" />
+    <div id="searchResults"></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ---- CONFIG: replace with your Supabase project values ----
+  const SUPABASE_URL ='https://fkniwollsgqvpeklvmdc.supabase.co';
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrbml3b2xsc2dxdnBla2x2bWRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDIzNDksImV4cCI6MjEwNTI3ODM0OX0._8hFmYoUpPru-I6D8LYeS-86O9nOQQ5IuXhmA5BgQN4";
+  // -------------------------------------------------------------
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let houses = [], participants = [], items = [], results = [];
+
+  const statusText = document.getElementById("statusText");
+  const statusDot = document.getElementById("statusDot");
+
+  function escapeHtml(str) {
+    return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  async function loadAll() {
+    const [h, p, i, r] = await Promise.all([
+      supabaseClient.from("houses").select("*"),
+      supabaseClient.from("participants").select("*"),
+      supabaseClient.from("items").select("*"),
+      supabaseClient.from("results").select("*"),
+    ]);
+    houses = h.data || [];
+    participants = p.data || [];
+    items = i.data || [];
+    results = r.data || [];
+    renderScoreboard();
+    renderItems();
+    renderSearch();
+  }
+
+  function subscribeRealtime() {
+    supabaseClient
+      .channel("public:kalolsavam")
+      .on("postgres_changes", { event: "*", schema: "public", table: "houses" }, loadAll)
+      .on("postgres_changes", { event: "*", schema: "public", table: "participants" }, loadAll)
+      .on("postgres_changes", { event: "*", schema: "public", table: "items" }, loadAll)
+      .on("postgres_changes", { event: "*", schema: "public", table: "results" }, loadAll)
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          statusText.textContent = "Live — updates in real time";
+          statusDot.style.background = "#22c55e";
+        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          statusText.textContent = "Connection issue — retrying…";
+          statusDot.style.background = "#ef4444";
+        }
+      });
+  }
+
+  function renderScoreboard() {
+    const totals = houses.map((house) => {
+      const points = results.filter((r) => r.house_id === house.id).reduce((sum, r) => sum + (r.points || 0), 0);
+      return { ...house, points };
+    }).sort((a, b) => b.points - a.points);
+
+    const el = document.getElementById("scoreboardList");
+    if (!totals.length) { el.innerHTML = '<div class="empty">No houses added yet.</div>'; return; }
+    el.innerHTML = totals.map((h, idx) => `
+      <div class="house-card" style="--house-color:${escapeHtml(h.color || '#f59e0b')}">
+        <div class="house-rank">${idx + 1}</div>
+        <div class="house-info"><div class="name">${escapeHtml(h.name)}</div></div>
+        <div class="house-points">${h.points}</div>
+      </div>
+    `).join("");
+  }
+
+  function renderItems() {
+    const el = document.getElementById("itemsList");
+    if (!items.length) { el.innerHTML = '<div class="empty">No items added yet.</div>'; return; }
+    const order = { live: 0, upcoming: 1, finished: 2 };
+    const sorted = [...items].sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+
+    el.innerHTML = sorted.map((item) => {
+      const itemResults = results.filter((r) => r.item_id === item.id).sort((a, b) => (a.position || 99) - (b.position || 99));
+      const resultsHtml = itemResults.length ? `
+        <div class="item-results">
+          ${itemResults.map((r) => {
+            const house = houses.find((h) => h.id === r.house_id);
+            const participant = participants.find((p) => p.id === r.participant_id);
+            const who = participant ? escapeHtml(participant.name) : (house ? escapeHtml(house.name) : "—");
+            const houseName = house ? escapeHtml(house.name) : "";
+            return `<div class="res-row">
+              <span>${r.position ? `<span class="pos">#${r.position}</span>` : ""}${who}${participant ? ` (${houseName})` : ""}</span>
+              <span>${r.points} pts</span>
+            </div>`;
+          }).join("")}
+        </div>
+      ` : "";
+      return `
+        <div class="item-card">
+          <div class="item-top">
+            <div>
+              <div class="item-name">${escapeHtml(item.name)}</div>
+              <div class="item-type">${escapeHtml(item.item_type)}</div>
+            </div>
+            <span class="badge-status ${item.status}">${item.status}</span>
+          </div>
+          ${resultsHtml}
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderSearch() {
+    const query = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+    const el = document.getElementById("searchResults");
+    if (!query) { el.innerHTML = '<div class="empty">Start typing to search…</div>'; return; }
+
+    const matchedParticipants = participants.filter((p) => p.name.toLowerCase().includes(query));
+    const matchedHouses = houses.filter((h) => h.name.toLowerCase().includes(query));
+    const matchedItems = items.filter((i) => i.name.toLowerCase().includes(query));
+
+    let html = "";
+    if (matchedParticipants.length) {
+      html += `<div class="search-section"><h3>Participants</h3>`;
+      matchedParticipants.forEach((p) => {
+        const house = houses.find((h) => h.id === p.house_id);
+        const pts = results.filter((r) => r.participant_id === p.id).reduce((s, r) => s + r.points, 0);
+        html += `<div class="search-row"><strong>${escapeHtml(p.name)}</strong>
+          <div class="sub">${house ? escapeHtml(house.name) : "No house"}${p.category ? " · " + escapeHtml(p.category) : ""} · ${pts} pts total</div></div>`;
+      });
+      html += `</div>`;
+    }
+    if (matchedHouses.length) {
+      html += `<div class="search-section"><h3>Houses</h3>`;
+      matchedHouses.forEach((h) => {
+        const pts = results.filter((r) => r.house_id === h.id).reduce((s, r) => s + r.points, 0);
+        html += `<div class="search-row"><strong>${escapeHtml(h.name)}</strong><div class="sub">${pts} total points</div></div>`;
+      });
+      html += `</div>`;
+    }
+    if (matchedItems.length) {
+      html += `<div class="search-section"><h3>Items</h3>`;
+      matchedItems.forEach((i) => {
+        html += `<div class="search-row"><strong>${escapeHtml(i.name)}</strong><div class="sub">${escapeHtml(i.item_type)} · ${escapeHtml(i.status)}</div></div>`;
+      });
+      html += `</div>`;
+    }
+    if (!html) html = '<div class="empty">No matches found.</div>';
+    el.innerHTML = html;
+  }
+
+  document.getElementById("searchInput").addEventListener("input", renderSearch);
+
+  document.querySelectorAll("nav button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("nav button").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("view-" + btn.dataset.view).classList.add("active");
+    });
+  });
+
+  loadAll();
+  subscribeRealtime();
+</script>
+
+</body>
+</html>

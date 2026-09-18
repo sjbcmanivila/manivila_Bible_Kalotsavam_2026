@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kalolsavam Admin</title>
+<style>
+  :root {
+    --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --muted: #94a3b8;
+    --accent: #22c55e; --danger: #ef4444; --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 20px 14px 60px; }
+  h1 { text-align: center; font-size: 1.4rem; margin-bottom: 4px; }
+  .sub-h1 { text-align: center; color: var(--muted); font-size: 0.8rem; margin-bottom: 18px; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  .card { background: var(--card-bg); border-radius: 14px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card > strong { display: block; margin-bottom: 8px; font-size: 1rem; }
+  label { display: block; font-size: 0.78rem; color: var(--muted); margin: 10px 0 4px; }
+  input, select { width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text); font-size: 0.9rem; }
+  input[type=color] { padding: 3px; height: 38px; }
+  button { padding: 10px 16px; border: none; border-radius: 9px; background: var(--accent); color: #05220f; font-weight: 700; font-size: 0.88rem; cursor: pointer; margin-top: 12px; }
+  button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 5px 10px; font-size: 0.78rem; margin: 2px; }
+  button.danger { background: var(--danger); color: white; padding: 5px 10px; font-size: 0.78rem; margin: 2px; }
+  .row { display: flex; gap: 10px; }
+  .row > div { flex: 1; }
+  .msg { font-size: 0.82rem; margin-top: 8px; min-height: 16px; }
+  .msg.ok { color: var(--accent); }
+  .msg.err { color: var(--danger); }
+  .hidden { display: none; }
+  .list-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #0f172a; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 6px; }
+  .list-item .info { font-size: 0.85rem; }
+  .list-item .info .sub { color: var(--muted); font-size: 0.74rem; }
+  .list-item .actions { white-space: nowrap; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tabs button { margin: 0; background: var(--card-bg); border: 1px solid var(--border); color: var(--text); font-weight: 500; }
+  .tabs button.active { background: var(--accent); color: #05220f; border-color: var(--accent); font-weight: 700; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .logout { text-align: center; margin-top: 20px; }
+  .logout a { color: var(--muted); font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+  .color-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<h1>🔧 Kalolsavam Admin</h1>
+<div class="sub-h1">St. John The Baptist RC Church, Manivila</div>
+<div class="wrap">
+
+  <div id="loginView" class="card">
+    <label>Email</label>
+    <input type="email" id="loginEmail" placeholder="you@example.com" />
+    <label>Password</label>
+    <input type="password" id="loginPassword" placeholder="••••••••" />
+    <button onclick="login()">Log In</button>
+    <div class="msg" id="loginMsg"></div>
+  </div>
+
+  <div id="adminView" class="hidden">
+
+    <div class="tabs">
+      <button class="active" data-tab="houses">Houses</button>
+      <button data-tab="participants">Participants</button>
+      <button data-tab="items">Items</button>
+      <button data-tab="results">Results</button>
+    </div>
+
+    <!-- HOUSES -->
+    <div class="tab-panel active" id="tab-houses">
+      <div class="card">
+        <strong>Add House</strong>
+        <div class="row">
+          <div><label>House Name</label><input type="text" id="newHouseName" placeholder="e.g. Red House" /></div>
+          <div><label>Color</label><input type="color" id="newHouseColor" value="#f59e0b" /></div>
+        </div>
+        <button onclick="addHouse()">Add House</button>
+        <div class="msg" id="houseMsg"></div>
+      </div>
+      <div class="card">
+        <strong>Existing Houses</strong>
+        <div id="houseList"><div class="msg">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- PARTICIPANTS -->
+    <div class="tab-panel" id="tab-participants">
+      <div class="card">
+        <strong>Add Participant</strong>
+        <label>Name</label>
+        <input type="text" id="newPName" placeholder="Participant name" />
+        <div class="row">
+          <div>
+            <label>House</label>
+            <select id="newPHouse"></select>
+          </div>
+          <div>
+            <label>Category (optional)</label>
+            <input type="text" id="newPCategory" placeholder="e.g. Junior" />
+          </div>
+        </div>
+        <button onclick="addParticipant()">Add Participant</button>
+        <div class="msg" id="participantMsg"></div>
+      </div>
+      <div class="card">
+        <strong>Existing Participants</strong>
+        <div id="participantList"><div class="msg">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ITEMS -->
+    <div class="tab-panel" id="tab-items">
+      <div class="card">
+        <strong>Add Item</strong>
+        <label>Item Name</label>
+        <input type="text" id="newItemName" placeholder="e.g. Group Song" />
+        <div class="row">
+          <div>
+            <label>Type</label>
+            <select id="newItemType">
+              <option value="individual">Individual</option>
+              <option value="group">Group</option>
+            </select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="newItemStatus">
+              <option value="upcoming">Upcoming</option>
+              <option value="live">Live</option>
+              <option value="finished">Finished</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="addItem()">Add Item</button>
+        <div class="msg" id="itemMsg"></div>
+      </div>
+      <div class="card">
+        <strong>Existing Items</strong>
+        <div id="itemList"><div class="msg">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="tab-panel" id="tab-results">
+      <div class="card">
+        <strong>Add Result</strong>
+        <label>Item</label>
+        <select id="resItem"></select>
+        <label>House</label>
+        <select id="resHouse"></select>
+        <label>Participant (leave blank for group items)</label>
+        <select id="resParticipant"><option value="">— none (group result) —</option></select>
+        <div class="row">
+          <div><label>Position (1/2/3, optional)</label><input type="number" id="resPosition" min="1" max="10" /></div>
+          <div><label>Points</label><input type="number" id="resPoints" value="0" /></div>
+        </div>
+        <button onclick="addResult()">Add Result</button>
+        <div class="msg" id="resultMsg"></div>
+      </div>
+      <div class="card">
+        <strong>Existing Results</strong>
+        <div id="resultList"><div class="msg">Loading…</div></div>
+      </div>
+    </div>
+
+    <div class="logout"><a onclick="logout()">Log out</a></div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ---- CONFIG: replace with your Supabase project values ----
+  const SUPABASE_URL ='https://fkniwollsgqvpeklvmdc.supabase.co';
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrbml3b2xsc2dxdnBla2x2bWRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDIzNDksImV4cCI6MjEwNTI3ODM0OX0._8hFmYoUpPru-I6D8LYeS-86O9nOQQ5IuXhmA5BgQN4";
+  // -------------------------------------------------------------
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const loginView = document.getElementById("loginView");
+  const adminView = document.getElementById("adminView");
+  const loginMsg = document.getElementById("loginMsg");
+
+  let houses = [], participants = [], items = [], results = [];
+
+  function escapeHtml(str) {
+    return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  // ---------- Auth ----------
+  async function checkSession() {
+    const { data } = await supabaseClient.auth.getSession();
+    if (data.session) showAdmin();
+  }
+  async function login() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    loginMsg.textContent = ""; loginMsg.className = "msg";
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) { loginMsg.textContent = error.message; loginMsg.className = "msg err"; return; }
+    showAdmin();
+  }
+  async function logout() {
+    await supabaseClient.auth.signOut();
+    adminView.classList.add("hidden");
+    loginView.classList.remove("hidden");
+  }
+  function showAdmin() {
+    loginView.classList.add("hidden");
+    adminView.classList.remove("hidden");
+    loadAll();
+  }
+
+  // ---------- Tabs ----------
+  document.querySelectorAll(".tabs button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tabs button").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  // ---------- Load everything ----------
+  async function loadAll() {
+    const [h, p, i, r] = await Promise.all([
+      supabaseClient.from("houses").select("*").order("name"),
+      supabaseClient.from("participants").select("*").order("name"),
+      supabaseClient.from("items").select("*").order("name"),
+      supabaseClient.from("results").select("*").order("updated_at", { ascending: false }),
+    ]);
+    houses = h.data || [];
+    participants = p.data || [];
+    items = i.data || [];
+    results = r.data || [];
+
+    renderHouses();
+    renderParticipants();
+    renderItems();
+    renderResults();
+    fillSelects();
+  }
+
+  function fillSelects() {
+    const houseOptions = houses.map((h) => `<option value="${h.id}">${escapeHtml(h.name)}</option>`).join("");
+    document.getElementById("newPHouse").innerHTML = houseOptions || "<option value=''>Add a house first</option>";
+    document.getElementById("resHouse").innerHTML = houseOptions || "<option value=''>Add a house first</option>";
+
+    document.getElementById("resItem").innerHTML = items.map((i) => `<option value="${i.id}">${escapeHtml(i.name)}</option>`).join("") || "<option value=''>Add an item first</option>";
+
+    document.getElementById("resParticipant").innerHTML = '<option value="">— none (group result) —</option>' +
+      participants.map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
+  }
+
+  // ---------- Houses ----------
+  async function addHouse() {
+    const name = document.getElementById("newHouseName").value.trim();
+    const color = document.getElementById("newHouseColor").value;
+    const msg = document.getElementById("houseMsg");
+    if (!name) { msg.textContent = "Enter a house name."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("houses").insert({ name, color });
+    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
+    msg.textContent = "House added."; msg.className = "msg ok";
+    document.getElementById("newHouseName").value = "";
+    loadAll();
+  }
+  async function deleteHouse(id) {
+    if (!confirm("Delete this house? This also removes its participants and results.")) return;
+    const { error } = await supabaseClient.from("houses").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  function renderHouses() {
+    const el = document.getElementById("houseList");
+    if (!houses.length) { el.innerHTML = '<div class="msg">No houses yet.</div>'; return; }
+    el.innerHTML = houses.map((h) => `
+      <div class="list-item">
+        <div class="info"><span class="color-dot" style="background:${escapeHtml(h.color)}"></span><strong>${escapeHtml(h.name)}</strong></div>
+        <div class="actions"><button class="danger" onclick="deleteHouse('${h.id}')">Delete</button></div>
+      </div>
+    `).join("");
+  }
+
+  // ---------- Participants ----------
+  async function addParticipant() {
+    const name = document.getElementById("newPName").value.trim();
+    const house_id = document.getElementById("newPHouse").value;
+    const category = document.getElementById("newPCategory").value.trim();
+    const msg = document.getElementById("participantMsg");
+    if (!name || !house_id) { msg.textContent = "Enter a name and select a house."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("participants").insert({ name, house_id, category: category || null });
+    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
+    msg.textContent = "Participant added."; msg.className = "msg ok";
+    document.getElementById("newPName").value = "";
+    document.getElementById("newPCategory").value = "";
+    loadAll();
+  }
+  async function deleteParticipant(id) {
+    if (!confirm("Delete this participant?")) return;
+    const { error } = await supabaseClient.from("participants").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  function renderParticipants() {
+    const el = document.getElementById("participantList");
+    if (!participants.length) { el.innerHTML = '<div class="msg">No participants yet.</div>'; return; }
+    el.innerHTML = participants.map((p) => {
+      const house = houses.find((h) => h.id === p.house_id);
+      return `
+        <div class="list-item">
+          <div class="info"><strong>${escapeHtml(p.name)}</strong>
+            <div class="sub">${house ? escapeHtml(house.name) : "No house"}${p.category ? " · " + escapeHtml(p.category) : ""}</div>
+          </div>
+          <div class="actions"><button class="danger" onclick="deleteParticipant('${p.id}')">Delete</button></div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // ---------- Items ----------
+  async function addItem() {
+    const name = document.getElementById("newItemName").value.trim();
+    const item_type = document.getElementById("newItemType").value;
+    const status = document.getElementById("newItemStatus").value;
+    const msg = document.getElementById("itemMsg");
+    if (!name) { msg.textContent = "Enter an item name."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("items").insert({ name, item_type, status });
+    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
+    msg.textContent = "Item added."; msg.className = "msg ok";
+    document.getElementById("newItemName").value = "";
+    loadAll();
+  }
+  async function deleteItem(id) {
+    if (!confirm("Delete this item and its results?")) return;
+    const { error } = await supabaseClient.from("items").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  async function cycleItemStatus(id, current) {
+    const order = ["upcoming", "live", "finished"];
+    const next = order[(order.indexOf(current) + 1) % order.length];
+    const { error } = await supabaseClient.from("items").update({ status: next }).eq("id", id);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  function renderItems() {
+    const el = document.getElementById("itemList");
+    if (!items.length) { el.innerHTML = '<div class="msg">No items yet.</div>'; return; }
+    el.innerHTML = items.map((i) => `
+      <div class="list-item">
+        <div class="info"><strong>${escapeHtml(i.name)}</strong><div class="sub">${escapeHtml(i.item_type)} · ${escapeHtml(i.status)}</div></div>
+        <div class="actions">
+          <button class="secondary" onclick="cycleItemStatus('${i.id}','${i.status}')">Cycle Status</button>
+          <button class="danger" onclick="deleteItem('${i.id}')">Delete</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // ---------- Results ----------
+  async function addResult() {
+    const item_id = document.getElementById("resItem").value;
+    const house_id = document.getElementById("resHouse").value;
+    const participant_id = document.getElementById("resParticipant").value || null;
+    const position = document.getElementById("resPosition").value || null;
+    const points = parseInt(document.getElementById("resPoints").value || "0", 10);
+    const msg = document.getElementById("resultMsg");
+    if (!item_id || !house_id) { msg.textContent = "Select an item and a house."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("results").insert({
+      item_id, house_id, participant_id, position: position ? parseInt(position, 10) : null, points
+    });
+    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
+    msg.textContent = "Result added."; msg.className = "msg ok";
+    document.getElementById("resPosition").value = "";
+    document.getElementById("resPoints").value = "0";
+    loadAll();
+  }
+  async function deleteResult(id) {
+    if (!confirm("Delete this result?")) return;
+    const { error } = await supabaseClient.from("results").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  function renderResults() {
+    const el = document.getElementById("resultList");
+    if (!results.length) { el.innerHTML = '<div class="msg">No results yet.</div>'; return; }
+    el.innerHTML = results.map((r) => {
+      const item = items.find((i) => i.id === r.item_id);
+      const house = houses.find((h) => h.id === r.house_id);
+      const participant = participants.find((p) => p.id === r.participant_id);
+      return `
+        <div class="list-item">
+          <div class="info">
+            <strong>${item ? escapeHtml(item.name) : "—"}</strong>
+            <div class="sub">${house ? escapeHtml(house.name) : ""}${participant ? " · " + escapeHtml(participant.name) : ""}${r.position ? " · Pos " + r.position : ""} · ${r.points} pts</div>
+          </div>
+          <div class="actions"><button class="danger" onclick="deleteResult('${r.id}')">Delete</button></div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  checkSession();
+</script>
+
+</body>
+</html>
