@@ -72,18 +72,6 @@
 
   main { max-width: 780px; margin: 0 auto; padding: 0 16px; }
 
-  .kalathilakam-card {
-    background: linear-gradient(135deg, rgba(251,191,36,0.18), rgba(217,119,6,0.08));
-    border: 1px solid rgba(251,191,36,0.4);
-    border-radius: 18px; padding: 20px; margin: 20px 0; text-align: center;
-    animation: fadeIn 0.6s ease;
-  }
-  .kalathilakam-card .icon { font-size: 2.2rem; }
-  .kalathilakam-card .title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); font-weight: 700; margin-top: 4px; }
-  .kalathilakam-card .name { font-size: 1.3rem; font-weight: 800; margin-top: 6px; }
-  .kalathilakam-card .details { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
-  .kalathilakam-card .points { font-size: 1.5rem; font-weight: 800; color: var(--gold); margin-top: 6px; }
-
   nav { display: flex; justify-content: center; gap: 8px; padding: 8px 0 18px; flex-wrap: wrap; }
   nav button {
     padding: 9px 18px; border-radius: 999px; border: 1px solid var(--card-border);
@@ -186,8 +174,6 @@
 </div>
 
 <main>
-  <div id="kalathilakamCard"></div>
-
   <nav>
     <button class="active" data-view="home">🏛️ Home</button>
     <button data-view="scoreboard">🏆 Scoreboard</button>
@@ -248,7 +234,6 @@
     venues = v.data || [];
 
     renderLiveBanner();
-    renderKalathilakam();
     renderHome();
     renderScoreboard();
     renderResults();
@@ -284,29 +269,6 @@
       const venue = venues.find((v) => v.id === i.venue_id);
       return `<div><b>LIVE</b>${escapeHtml(i.name)}${venue ? ` <span class="meta">· ${escapeHtml(venue.name)}</span>` : ""}</div>`;
     }).join("");
-  }
-
-  // ---------- Kalathilakam ----------
-  function renderKalathilakam() {
-    const el = document.getElementById("kalathilakamCard");
-    const totalsByKey = {};
-    results.forEach((r) => {
-      if (!r.participant_name) return;
-      const key = r.participant_name.trim().toLowerCase() + "|" + r.house_id;
-      if (!totalsByKey[key]) totalsByKey[key] = { name: r.participant_name, house_id: r.house_id, points: 0 };
-      totalsByKey[key].points += (r.points || 0);
-    });
-    const entries = Object.values(totalsByKey).sort((a, b) => b.points - a.points);
-    if (!entries.length) { el.innerHTML = ""; return; }
-    const top = entries[0];
-    const house = houses.find((h) => h.id === top.house_id);
-    el.innerHTML = `
-      <div class="kalathilakam-card">
-       <div class="name">${escapeHtml(top.name)}</div>
-        <div class="details">${house ? escapeHtml(house.name) : ""}</div>
-        <div class="points">${top.points} pts</div>
-      </div>
-    `;
   }
 
   // ---------- Home: venue cards ----------
