@@ -7,7 +7,7 @@
 <style>
   :root {
     --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --muted: #94a3b8;
-    --accent: #22c55e; --danger: #ef4444; --border: #334155;
+    --accent: #fbbf24; --danger: #ef4444; --border: #334155; --live: #ef4444; --finished: #64748b; --upcoming: #38bdf8;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 20px 14px 60px; }
@@ -19,7 +19,8 @@
   label { display: block; font-size: 0.78rem; color: var(--muted); margin: 10px 0 4px; }
   input, select { width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text); font-size: 0.9rem; }
   input[type=color] { padding: 3px; height: 38px; }
-  button { padding: 10px 16px; border: none; border-radius: 9px; background: var(--accent); color: #05220f; font-weight: 700; font-size: 0.88rem; cursor: pointer; margin-top: 12px; }
+  input[type=number].order-input { width: 70px; }
+  button { padding: 10px 16px; border: none; border-radius: 9px; background: var(--accent); color: #241a02; font-weight: 700; font-size: 0.88rem; cursor: pointer; margin-top: 12px; }
   button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 5px 10px; font-size: 0.78rem; margin: 2px; }
   button.danger { background: var(--danger); color: white; padding: 5px 10px; font-size: 0.78rem; margin: 2px; }
   .row { display: flex; gap: 10px; }
@@ -28,24 +29,42 @@
   .msg.ok { color: var(--accent); }
   .msg.err { color: var(--danger); }
   .hidden { display: none; }
-  .list-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #0f172a; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 6px; }
+  .list-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #0f172a; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 6px; gap: 10px; }
   .list-item .info { font-size: 0.85rem; }
   .list-item .info .sub { color: var(--muted); font-size: 0.74rem; }
-  .list-item .actions { white-space: nowrap; }
+  .list-item .actions { white-space: nowrap; flex-shrink: 0; }
   .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .tabs button { margin: 0; background: var(--card-bg); border: 1px solid var(--border); color: var(--text); font-weight: 500; }
-  .tabs button.active { background: var(--accent); color: #05220f; border-color: var(--accent); font-weight: 700; }
+  .tabs button.active { background: var(--accent); color: #241a02; border-color: var(--accent); font-weight: 700; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
   .logout { text-align: center; margin-top: 20px; }
   .logout a { color: var(--muted); font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
   .color-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .position-row { background: #0f172a; border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 10px; }
+  .position-row .pos-label { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
+  .pos-1 .pos-label { color: #fbbf24; }
+  .pos-2 .pos-label { color: #cbd5e1; }
+  .pos-3 .pos-label { color: #d97706; }
+  .status-chip { padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+  .status-chip.live { background: rgba(239,68,68,0.15); color: var(--live); }
+  .status-chip.finished { background: rgba(100,116,139,0.15); color: var(--finished); }
+  .status-chip.upcoming { background: rgba(56,189,248,0.15); color: var(--upcoming); }
+  .cycle-card { background: #0f172a; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; }
+  .cycle-card .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cycle-card .info .sub { color: var(--muted); font-size: 0.74rem; margin-top: 2px; }
+  .status-btn-row { display: flex; gap: 6px; margin-top: 10px; }
+  .status-btn { flex: 1; margin: 0; padding: 9px 6px; font-size: 0.8rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; }
+  .status-btn:disabled { cursor: default; opacity: 0.55; }
+  .status-btn.upcoming.active { background: rgba(56,189,248,0.15); border-color: var(--upcoming); color: var(--upcoming); }
+  .status-btn.live.active { background: rgba(239,68,68,0.15); border-color: var(--live); color: var(--live); }
+  .status-btn.finished.active { background: rgba(100,116,139,0.15); border-color: var(--finished); color: var(--finished); }
 </style>
 </head>
 <body>
 
 <h1>🔧 Kalolsavam Admin</h1>
-<div class="sub-h1">St. John The Baptist RC Church, Manivila</div>
+<div class="sub-h1">ഇടവകതല ബൈബിൾ കലോത്സവം 2026</div>
 <div class="wrap">
 
   <div id="loginView" class="card">
@@ -61,8 +80,10 @@
 
     <div class="tabs">
       <button class="active" data-tab="houses">Houses</button>
-      <button data-tab="participants">Participants</button>
+      <button data-tab="categories">Categories</button>
+      <button data-tab="venues">Venues</button>
       <button data-tab="items">Items</button>
+      <button data-tab="live">Live Control</button>
       <button data-tab="results">Results</button>
     </div>
 
@@ -77,34 +98,51 @@
         <button onclick="addHouse()">Add House</button>
         <div class="msg" id="houseMsg"></div>
       </div>
-      <div class="card">
-        <strong>Existing Houses</strong>
-        <div id="houseList"><div class="msg">Loading…</div></div>
-      </div>
+      <div class="card"><strong>Existing Houses</strong><div id="houseList"><div class="msg">Loading…</div></div></div>
     </div>
 
-    <!-- PARTICIPANTS -->
-    <div class="tab-panel" id="tab-participants">
+    <!-- CATEGORIES -->
+    <div class="tab-panel" id="tab-categories">
       <div class="card">
-        <strong>Add Participant</strong>
-        <label>Name</label>
-        <input type="text" id="newPName" placeholder="Participant name" />
-        <div class="row">
-          <div>
-            <label>House</label>
-            <select id="newPHouse"></select>
-          </div>
-          <div>
-            <label>Category (optional)</label>
-            <input type="text" id="newPCategory" placeholder="e.g. Junior" />
-          </div>
-        </div>
-        <button onclick="addParticipant()">Add Participant</button>
-        <div class="msg" id="participantMsg"></div>
+        <strong>Add Category</strong>
+        <label>Category Name</label>
+        <input type="text" id="newCategoryName" placeholder="e.g. Sub Junior" />
+        <button onclick="addCategory()">Add Category</button>
+        <div class="msg" id="categoryMsg"></div>
       </div>
+      <div class="card"><strong>Existing Categories</strong><div id="categoryList"><div class="msg">Loading…</div></div></div>
+    </div>
+
+    <!-- VENUES -->
+    <div class="tab-panel" id="tab-venues">
       <div class="card">
-        <strong>Existing Participants</strong>
-        <div id="participantList"><div class="msg">Loading…</div></div>
+        <strong>Add Venue</strong>
+        <label>Venue Name (e.g. വേദി 1)</label>
+        <input type="text" id="newVenueName" placeholder="വേദി 1" />
+        <div class="row">
+          <div><label>Location (optional)</label><input type="text" id="newVenueLocation" placeholder="e.g. Parish Hall" /></div>
+          <div><label>Landmark (optional)</label><input type="text" id="newVenueLandmark" placeholder="e.g. Near Main Gate" /></div>
+        </div>
+        <label>Display Order</label>
+        <input type="number" id="newVenueOrder" value="0" />
+        <button onclick="addVenue()">Add Venue</button>
+        <div class="msg" id="venueMsg"></div>
+      </div>
+      <div class="card"><strong>Existing Venues</strong><div id="venueList"><div class="msg">Loading…</div></div></div>
+
+      <div class="card">
+        <strong>Assign Items to a Venue</strong>
+        <label>Select Venue</label>
+        <select id="assignVenueSelect"></select>
+        <label>Add Item</label>
+        <div class="row">
+          <div><select id="assignItemSelect"></select></div>
+          <div><input type="number" class="order-input" id="assignItemOrder" placeholder="Order" value="0" /></div>
+        </div>
+        <button onclick="assignItemToVenue()">Add to Venue</button>
+        <div class="msg" id="assignMsg"></div>
+        <label style="margin-top:16px;">Items in this Venue (in order)</label>
+        <div id="assignedItemsList"><div class="msg">Select a venue above.</div></div>
       </div>
     </div>
 
@@ -116,50 +154,73 @@
         <input type="text" id="newItemName" placeholder="e.g. Group Song" />
         <div class="row">
           <div>
+            <label>Category</label>
+            <select id="newItemCategory"><option value="">— none —</option></select>
+          </div>
+          <div>
             <label>Type</label>
             <select id="newItemType">
               <option value="individual">Individual</option>
               <option value="group">Group</option>
             </select>
           </div>
-          <div>
-            <label>Status</label>
-            <select id="newItemStatus">
-              <option value="upcoming">Upcoming</option>
-              <option value="live">Live</option>
-              <option value="finished">Finished</option>
-            </select>
-          </div>
         </div>
+        <div class="msg" style="color:var(--muted);">Assign this item to a venue afterward from the Venues tab.</div>
         <button onclick="addItem()">Add Item</button>
         <div class="msg" id="itemMsg"></div>
       </div>
+      <div class="card"><strong>Existing Items</strong><div id="itemList"><div class="msg">Loading…</div></div></div>
+    </div>
+
+    <!-- LIVE CONTROL -->
+    <div class="tab-panel" id="tab-live">
       <div class="card">
-        <strong>Existing Items</strong>
-        <div id="itemList"><div class="msg">Loading…</div></div>
+        <strong>Live Control — Cycle Programme Status</strong>
+        <label>Select Venue</label>
+        <select id="liveVenueSelect"></select>
+        <div id="liveItemsList" style="margin-top:12px;"><div class="msg">Select a venue above.</div></div>
       </div>
     </div>
 
     <!-- RESULTS -->
     <div class="tab-panel" id="tab-results">
       <div class="card">
-        <strong>Add Result</strong>
-        <label>Item</label>
-        <select id="resItem"></select>
-        <label>House</label>
-        <select id="resHouse"></select>
-        <label>Participant (leave blank for group items)</label>
-        <select id="resParticipant"><option value="">— none (group result) —</option></select>
-        <div class="row">
-          <div><label>Position (1/2/3, optional)</label><input type="number" id="resPosition" min="1" max="10" /></div>
-          <div><label>Points</label><input type="number" id="resPoints" value="0" /></div>
+        <strong>Enter Results</strong>
+        <label>Select Item</label>
+        <select id="resultsItemSelect"></select>
+
+        <div class="position-row pos-1">
+          <div class="pos-label">🥇 1st Place</div>
+          <label>Name (leave blank for group item)</label>
+          <input type="text" id="resName_1" placeholder="Participant name" />
+          <label>House</label>
+          <select id="resHouse_1"><option value="">— select —</option></select>
+          <label>Points</label>
+          <input type="number" id="resPoints_1" placeholder="e.g. 5" />
         </div>
-        <button onclick="addResult()">Add Result</button>
+
+        <div class="position-row pos-2">
+          <div class="pos-label">🥈 2nd Place</div>
+          <label>Name (leave blank for group item)</label>
+          <input type="text" id="resName_2" placeholder="Participant name" />
+          <label>House</label>
+          <select id="resHouse_2"><option value="">— select —</option></select>
+          <label>Points</label>
+          <input type="number" id="resPoints_2" placeholder="e.g. 3" />
+        </div>
+
+        <div class="position-row pos-3">
+          <div class="pos-label">🥉 3rd Place</div>
+          <label>Name (leave blank for group item)</label>
+          <input type="text" id="resName_3" placeholder="Participant name" />
+          <label>House</label>
+          <select id="resHouse_3"><option value="">— select —</option></select>
+          <label>Points</label>
+          <input type="number" id="resPoints_3" placeholder="e.g. 1" />
+        </div>
+
+        <button onclick="saveResults()">Save Results</button>
         <div class="msg" id="resultMsg"></div>
-      </div>
-      <div class="card">
-        <strong>Existing Results</strong>
-        <div id="resultList"><div class="msg">Loading…</div></div>
       </div>
     </div>
 
@@ -171,7 +232,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // ---- CONFIG: replace with your Supabase project values ----
-  const SUPABASE_URL ='https://fkniwollsgqvpeklvmdc.supabase.co';
+  const SUPABASE_URL = "https://fkniwollsgqvpeklvmdc.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrbml3b2xsc2dxdnBla2x2bWRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDIzNDksImV4cCI6MjEwNTI3ODM0OX0._8hFmYoUpPru-I6D8LYeS-86O9nOQQ5IuXhmA5BgQN4";
   // -------------------------------------------------------------
 
@@ -181,7 +242,7 @@
   const adminView = document.getElementById("adminView");
   const loginMsg = document.getElementById("loginMsg");
 
-  let houses = [], participants = [], items = [], results = [];
+  let houses = [], items = [], results = [], categories = [], venues = [];
 
   function escapeHtml(str) {
     return String(str ?? "").replace(/[&<>"']/g, (c) => ({
@@ -225,34 +286,69 @@
 
   // ---------- Load everything ----------
   async function loadAll() {
-    const [h, p, i, r] = await Promise.all([
+    const [h, i, r, c, v] = await Promise.all([
       supabaseClient.from("houses").select("*").order("name"),
-      supabaseClient.from("participants").select("*").order("name"),
       supabaseClient.from("items").select("*").order("name"),
-      supabaseClient.from("results").select("*").order("updated_at", { ascending: false }),
+      supabaseClient.from("results").select("*"),
+      supabaseClient.from("categories").select("*").order("name"),
+      supabaseClient.from("venues").select("*").order("display_order"),
     ]);
     houses = h.data || [];
-    participants = p.data || [];
     items = i.data || [];
     results = r.data || [];
+    categories = c.data || [];
+    venues = v.data || [];
 
     renderHouses();
-    renderParticipants();
+    renderCategories();
+    renderVenues();
     renderItems();
-    renderResults();
     fillSelects();
+    renderAssignedItems();
+    renderLiveControl();
   }
 
   function fillSelects() {
-    const houseOptions = houses.map((h) => `<option value="${h.id}">${escapeHtml(h.name)}</option>`).join("");
-    document.getElementById("newPHouse").innerHTML = houseOptions || "<option value=''>Add a house first</option>";
-    document.getElementById("resHouse").innerHTML = houseOptions || "<option value=''>Add a house first</option>";
+    const houseOptions = '<option value="">— select —</option>' + houses.map((h) => `<option value="${h.id}">${escapeHtml(h.name)}</option>`).join("");
+    ["resHouse_1", "resHouse_2", "resHouse_3"].forEach((id) => { document.getElementById(id).innerHTML = houseOptions; });
 
-    document.getElementById("resItem").innerHTML = items.map((i) => `<option value="${i.id}">${escapeHtml(i.name)}</option>`).join("") || "<option value=''>Add an item first</option>";
+    document.getElementById("newItemCategory").innerHTML = '<option value="">— none —</option>' +
+      categories.map((c) => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
 
-    document.getElementById("resParticipant").innerHTML = '<option value="">— none (group result) —</option>' +
-      participants.map((p) => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
+    const venueOptions = venues.map((v) => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("");
+    const assignSel = document.getElementById("assignVenueSelect");
+    const prevAssign = assignSel.value;
+    assignSel.innerHTML = venueOptions || "<option value=''>Add a venue first</option>";
+    if (prevAssign && venues.some((v) => v.id === prevAssign)) assignSel.value = prevAssign;
+
+    const liveSel = document.getElementById("liveVenueSelect");
+    const prevLive = liveSel.value;
+    liveSel.innerHTML = venueOptions || "<option value=''>Add a venue first</option>";
+    if (prevLive && venues.some((v) => v.id === prevLive)) liveSel.value = prevLive;
+
+    document.getElementById("assignItemSelect").innerHTML = items.map((i) => {
+      const cat = categories.find((c) => c.id === i.category_id);
+      const label = cat ? `${i.name} (${cat.name})` : i.name;
+      return `<option value="${i.id}">${escapeHtml(label)}</option>`;
+    }).join("") || "<option value=''>Add an item first</option>";
+
+    const itemSelect = document.getElementById("resultsItemSelect");
+    const prevVal = itemSelect.value;
+    itemSelect.innerHTML = items.map((i) => {
+      const cat = categories.find((c) => c.id === i.category_id);
+      const label = cat ? `${i.name} (${cat.name})` : i.name;
+      return `<option value="${i.id}">${escapeHtml(label)}</option>`;
+    }).join("") || "<option value=''>Add an item first</option>";
+    if (prevVal && items.some((i) => i.id === prevVal)) {
+      itemSelect.value = prevVal;
+    } else if (items.length) {
+      itemSelect.value = items[0].id;
+      populateResultsForm(items[0].id);
+    }
   }
+
+  document.getElementById("assignVenueSelect").addEventListener("change", renderAssignedItems);
+  document.getElementById("liveVenueSelect").addEventListener("change", renderLiveControl);
 
   // ---------- Houses ----------
   async function addHouse() {
@@ -267,7 +363,7 @@
     loadAll();
   }
   async function deleteHouse(id) {
-    if (!confirm("Delete this house? This also removes its participants and results.")) return;
+    if (!confirm("Delete this house? This also removes its results.")) return;
     const { error } = await supabaseClient.from("houses").delete().eq("id", id);
     if (error) return alert(error.message);
     loadAll();
@@ -283,52 +379,124 @@
     `).join("");
   }
 
-  // ---------- Participants ----------
-  async function addParticipant() {
-    const name = document.getElementById("newPName").value.trim();
-    const house_id = document.getElementById("newPHouse").value;
-    const category = document.getElementById("newPCategory").value.trim();
-    const msg = document.getElementById("participantMsg");
-    if (!name || !house_id) { msg.textContent = "Enter a name and select a house."; msg.className = "msg err"; return; }
-    const { error } = await supabaseClient.from("participants").insert({ name, house_id, category: category || null });
+  // ---------- Categories ----------
+  async function addCategory() {
+    const name = document.getElementById("newCategoryName").value.trim();
+    const msg = document.getElementById("categoryMsg");
+    if (!name) { msg.textContent = "Enter a category name."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("categories").insert({ name });
     if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
-    msg.textContent = "Participant added."; msg.className = "msg ok";
-    document.getElementById("newPName").value = "";
-    document.getElementById("newPCategory").value = "";
+    msg.textContent = "Category added."; msg.className = "msg ok";
+    document.getElementById("newCategoryName").value = "";
     loadAll();
   }
-  async function deleteParticipant(id) {
-    if (!confirm("Delete this participant?")) return;
-    const { error } = await supabaseClient.from("participants").delete().eq("id", id);
+  async function deleteCategory(id) {
+    if (!confirm("Delete this category?")) return;
+    const { error } = await supabaseClient.from("categories").delete().eq("id", id);
     if (error) return alert(error.message);
     loadAll();
   }
-  function renderParticipants() {
-    const el = document.getElementById("participantList");
-    if (!participants.length) { el.innerHTML = '<div class="msg">No participants yet.</div>'; return; }
-    el.innerHTML = participants.map((p) => {
-      const house = houses.find((h) => h.id === p.house_id);
-      return `
-        <div class="list-item">
-          <div class="info"><strong>${escapeHtml(p.name)}</strong>
-            <div class="sub">${house ? escapeHtml(house.name) : "No house"}${p.category ? " · " + escapeHtml(p.category) : ""}</div>
-          </div>
-          <div class="actions"><button class="danger" onclick="deleteParticipant('${p.id}')">Delete</button></div>
+  function renderCategories() {
+    const el = document.getElementById("categoryList");
+    if (!categories.length) { el.innerHTML = '<div class="msg">No categories yet.</div>'; return; }
+    el.innerHTML = categories.map((c) => `
+      <div class="list-item">
+        <div class="info"><strong>${escapeHtml(c.name)}</strong></div>
+        <div class="actions"><button class="danger" onclick="deleteCategory('${c.id}')">Delete</button></div>
+      </div>
+    `).join("");
+  }
+
+  // ---------- Venues ----------
+  async function addVenue() {
+    const name = document.getElementById("newVenueName").value.trim();
+    const location = document.getElementById("newVenueLocation").value.trim();
+    const landmark = document.getElementById("newVenueLandmark").value.trim();
+    const display_order = parseInt(document.getElementById("newVenueOrder").value || "0", 10);
+    const msg = document.getElementById("venueMsg");
+    if (!name) { msg.textContent = "Enter a venue name."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("venues").insert({ name, location: location || null, landmark: landmark || null, display_order });
+    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
+    msg.textContent = "Venue added."; msg.className = "msg ok";
+    document.getElementById("newVenueName").value = "";
+    document.getElementById("newVenueLocation").value = "";
+    document.getElementById("newVenueLandmark").value = "";
+    document.getElementById("newVenueOrder").value = "0";
+    loadAll();
+  }
+  async function deleteVenue(id) {
+    if (!confirm("Delete this venue? Items assigned to it will become unassigned.")) return;
+    const { error } = await supabaseClient.from("venues").delete().eq("id", id);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  function renderVenues() {
+    const el = document.getElementById("venueList");
+    if (!venues.length) { el.innerHTML = '<div class="msg">No venues yet.</div>'; return; }
+    el.innerHTML = venues.map((v) => `
+      <div class="list-item">
+        <div class="info"><strong>${escapeHtml(v.name)}</strong>
+          <div class="sub">${[v.location, v.landmark].filter(Boolean).map(escapeHtml).join(" · ") || "No location/landmark"} · order ${v.display_order}</div>
         </div>
-      `;
+        <div class="actions"><button class="danger" onclick="deleteVenue('${v.id}')">Delete</button></div>
+      </div>
+    `).join("");
+  }
+
+  // ---------- Assign items to venue ----------
+  async function assignItemToVenue() {
+    const venue_id = document.getElementById("assignVenueSelect").value;
+    const item_id = document.getElementById("assignItemSelect").value;
+    const item_order = parseInt(document.getElementById("assignItemOrder").value || "0", 10);
+    const msg = document.getElementById("assignMsg");
+    if (!venue_id || !item_id) { msg.textContent = "Select both a venue and an item."; msg.className = "msg err"; return; }
+    const { error } = await supabaseClient.from("items").update({ venue_id, item_order }).eq("id", item_id);
+    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
+    msg.textContent = "Item assigned."; msg.className = "msg ok";
+    loadAll();
+  }
+  async function removeItemFromVenue(itemId) {
+    const { error } = await supabaseClient.from("items").update({ venue_id: null }).eq("id", itemId);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  async function updateItemOrder(itemId, newOrder) {
+    const { error } = await supabaseClient.from("items").update({ item_order: parseInt(newOrder || "0", 10) }).eq("id", itemId);
+    if (error) return alert(error.message);
+    loadAll();
+  }
+  function renderAssignedItems() {
+    const venueId = document.getElementById("assignVenueSelect").value;
+    const el = document.getElementById("assignedItemsList");
+    if (!venueId) { el.innerHTML = '<div class="msg">Select a venue above.</div>'; return; }
+    const assigned = items.filter((i) => i.venue_id === venueId).sort((a, b) => (a.item_order ?? 0) - (b.item_order ?? 0));
+    if (!assigned.length) { el.innerHTML = '<div class="msg">No items assigned to this venue yet.</div>'; return; }
+    el.innerHTML = assigned.map((i) => {
+      const cat = categories.find((c) => c.id === i.category_id);
+      return `
+      <div class="list-item">
+        <div class="info"><strong>${escapeHtml(i.name)}</strong><div class="sub">${cat ? escapeHtml(cat.name) + " · " : ""}order ${i.item_order}</div></div>
+        <div class="actions">
+          <input type="number" class="order-input" value="${i.item_order}" onchange="updateItemOrder('${i.id}', this.value)" />
+          <button class="danger" onclick="removeItemFromVenue('${i.id}')">Remove</button>
+        </div>
+      </div>
+    `;
     }).join("");
   }
 
   // ---------- Items ----------
   async function addItem() {
     const name = document.getElementById("newItemName").value.trim();
+    const category_id = document.getElementById("newItemCategory").value || null;
     const item_type = document.getElementById("newItemType").value;
-    const status = document.getElementById("newItemStatus").value;
     const msg = document.getElementById("itemMsg");
     if (!name) { msg.textContent = "Enter an item name."; msg.className = "msg err"; return; }
-    const { error } = await supabaseClient.from("items").insert({ name, item_type, status });
+    const { error } = await supabaseClient.from("items").insert({
+      name, category_id, item_type, status: "upcoming"
+    });
     if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
-    msg.textContent = "Item added."; msg.className = "msg ok";
+    msg.textContent = "Item added. Assign it to a venue from the Venues tab."; msg.className = "msg ok";
     document.getElementById("newItemName").value = "";
     loadAll();
   }
@@ -338,68 +506,89 @@
     if (error) return alert(error.message);
     loadAll();
   }
-  async function cycleItemStatus(id, current) {
-    const order = ["upcoming", "live", "finished"];
-    const next = order[(order.indexOf(current) + 1) % order.length];
-    const { error } = await supabaseClient.from("items").update({ status: next }).eq("id", id);
-    if (error) return alert(error.message);
-    loadAll();
-  }
   function renderItems() {
     const el = document.getElementById("itemList");
     if (!items.length) { el.innerHTML = '<div class="msg">No items yet.</div>'; return; }
-    el.innerHTML = items.map((i) => `
+    el.innerHTML = items.map((i) => {
+      const cat = categories.find((c) => c.id === i.category_id);
+      const venue = venues.find((v) => v.id === i.venue_id);
+      const metaParts = [cat ? cat.name : null, venue ? venue.name : "Unassigned", i.stage, i.landmark].filter(Boolean).map(escapeHtml);
+      return `
       <div class="list-item">
-        <div class="info"><strong>${escapeHtml(i.name)}</strong><div class="sub">${escapeHtml(i.item_type)} · ${escapeHtml(i.status)}</div></div>
-        <div class="actions">
-          <button class="secondary" onclick="cycleItemStatus('${i.id}','${i.status}')">Cycle Status</button>
-          <button class="danger" onclick="deleteItem('${i.id}')">Delete</button>
-        </div>
+        <div class="info"><strong>${escapeHtml(i.name)}</strong><div class="sub">${escapeHtml(i.item_type)} · ${escapeHtml(i.status)}${metaParts.length ? " · " + metaParts.join(" · ") : ""}</div></div>
+        <div class="actions"><button class="danger" onclick="deleteItem('${i.id}')">Delete</button></div>
       </div>
-    `).join("");
+    `;
+    }).join("");
   }
 
-  // ---------- Results ----------
-  async function addResult() {
-    const item_id = document.getElementById("resItem").value;
-    const house_id = document.getElementById("resHouse").value;
-    const participant_id = document.getElementById("resParticipant").value || null;
-    const position = document.getElementById("resPosition").value || null;
-    const points = parseInt(document.getElementById("resPoints").value || "0", 10);
-    const msg = document.getElementById("resultMsg");
-    if (!item_id || !house_id) { msg.textContent = "Select an item and a house."; msg.className = "msg err"; return; }
-    const { error } = await supabaseClient.from("results").insert({
-      item_id, house_id, participant_id, position: position ? parseInt(position, 10) : null, points
-    });
-    if (error) { msg.textContent = error.message; msg.className = "msg err"; return; }
-    msg.textContent = "Result added."; msg.className = "msg ok";
-    document.getElementById("resPosition").value = "";
-    document.getElementById("resPoints").value = "0";
-    loadAll();
-  }
-  async function deleteResult(id) {
-    if (!confirm("Delete this result?")) return;
-    const { error } = await supabaseClient.from("results").delete().eq("id", id);
+  // ---------- Live Control ----------
+  async function setStatusLive(id, status) {
+    const { error } = await supabaseClient.from("items").update({ status }).eq("id", id);
     if (error) return alert(error.message);
     loadAll();
   }
-  function renderResults() {
-    const el = document.getElementById("resultList");
-    if (!results.length) { el.innerHTML = '<div class="msg">No results yet.</div>'; return; }
-    el.innerHTML = results.map((r) => {
-      const item = items.find((i) => i.id === r.item_id);
-      const house = houses.find((h) => h.id === r.house_id);
-      const participant = participants.find((p) => p.id === r.participant_id);
+  function renderLiveControl() {
+    const venueId = document.getElementById("liveVenueSelect").value;
+    const el = document.getElementById("liveItemsList");
+    if (!venueId) { el.innerHTML = '<div class="msg">Select a venue above.</div>'; return; }
+    const venueItems = items.filter((i) => i.venue_id === venueId).sort((a, b) => (a.item_order ?? 0) - (b.item_order ?? 0));
+    if (!venueItems.length) { el.innerHTML = '<div class="msg">No items in this venue yet.</div>'; return; }
+    const statuses = ["upcoming", "live", "finished"];
+    el.innerHTML = venueItems.map((i) => {
+      const cat = categories.find((c) => c.id === i.category_id);
       return `
-        <div class="list-item">
-          <div class="info">
-            <strong>${item ? escapeHtml(item.name) : "—"}</strong>
-            <div class="sub">${house ? escapeHtml(house.name) : ""}${participant ? " · " + escapeHtml(participant.name) : ""}${r.position ? " · Pos " + r.position : ""} · ${r.points} pts</div>
-          </div>
-          <div class="actions"><button class="danger" onclick="deleteResult('${r.id}')">Delete</button></div>
+      <div class="cycle-card">
+        <div class="top-row">
+          <div class="info"><strong>${escapeHtml(i.name)}</strong>${cat ? `<div class="sub">${escapeHtml(cat.name)}</div>` : ""}</div>
+          <span class="status-chip ${i.status}">${escapeHtml(i.status)}</span>
         </div>
-      `;
+        <div class="status-btn-row">
+          ${statuses.map((s) => `<button class="status-btn ${s}${i.status === s ? " active" : ""}" onclick="setStatusLive('${i.id}','${s}')" ${i.status === s ? "disabled" : ""}>${s.charAt(0).toUpperCase() + s.slice(1)}</button>`).join("")}
+        </div>
+      </div>
+    `;
     }).join("");
+  }
+
+  // ---------- Results ----------
+  document.getElementById("resultsItemSelect").addEventListener("change", (e) => {
+    populateResultsForm(e.target.value);
+  });
+
+  function populateResultsForm(itemId) {
+    [1, 2, 3].forEach((pos) => {
+      const existing = results.find((r) => r.item_id === itemId && r.position === pos);
+      document.getElementById("resName_" + pos).value = existing?.participant_name || "";
+      document.getElementById("resHouse_" + pos).value = existing?.house_id || "";
+      document.getElementById("resPoints_" + pos).value = existing ? existing.points : "";
+    });
+  }
+
+  async function saveResults() {
+    const item_id = document.getElementById("resultsItemSelect").value;
+    const msg = document.getElementById("resultMsg");
+    if (!item_id) { msg.textContent = "Select an item first."; msg.className = "msg err"; return; }
+
+    const { error: delErr } = await supabaseClient.from("results").delete().eq("item_id", item_id).in("position", [1, 2, 3]);
+    if (delErr) { msg.textContent = delErr.message; msg.className = "msg err"; return; }
+
+    const rows = [];
+    [1, 2, 3].forEach((pos) => {
+      const house_id = document.getElementById("resHouse_" + pos).value;
+      if (!house_id) return;
+      const name = document.getElementById("resName_" + pos).value.trim();
+      const points = parseInt(document.getElementById("resPoints_" + pos).value || "0", 10);
+      rows.push({ item_id, house_id, participant_name: name || null, position: pos, points });
+    });
+
+    if (rows.length) {
+      const { error: insErr } = await supabaseClient.from("results").insert(rows);
+      if (insErr) { msg.textContent = insErr.message; msg.className = "msg err"; return; }
+    }
+
+    msg.textContent = "Results saved."; msg.className = "msg ok";
+    loadAll();
   }
 
   checkSession();
