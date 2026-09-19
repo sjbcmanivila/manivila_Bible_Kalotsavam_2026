@@ -3,87 +3,163 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>കലോൽസവം — St. John The Baptist RC Church, Manivila</title>
+<title>ഇടവകതല ബൈബിൾ കലോത്സവം 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f172a;
-    --card-bg: #1e293b;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --accent: #f59e0b;
-    --border: #334155;
+    --bg1: #1a0f2e; --bg2: #2d1b4e; --bg3: #1a0f2e;
+    --card-bg: rgba(30, 22, 55, 0.75);
+    --card-border: rgba(251, 191, 36, 0.15);
+    --text: #f5f3ff;
+    --muted: #a89fc9;
+    --gold: #fbbf24;
+    --silver: #cbd5e1;
+    --bronze: #d97706;
     --live: #ef4444;
     --finished: #64748b;
-    --upcoming: #3b82f6;
+    --upcoming: #38bdf8;
+    --announced: #22c55e;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
+    font-family: 'Poppins', 'Noto Sans Malayalam', sans-serif;
     color: var(--text);
     padding-bottom: 60px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+    background-size: 300% 300%;
+    animation: bgShift 18s ease infinite;
   }
-  header {
-    text-align: center;
-    padding: 28px 16px 18px;
-    background: linear-gradient(180deg, #1e293b, #0f172a);
-    border-bottom: 1px solid var(--border);
-  }
+  @keyframes bgShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+  header { text-align: center; padding: 28px 16px 16px; }
   header .badge {
-    display: inline-block;
-    background: var(--accent);
-    color: #1c1300;
-    font-weight: 800;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    padding: 3px 10px;
-    border-radius: 999px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
+    display: inline-block; background: rgba(251,191,36,0.15); color: var(--gold);
+    font-weight: 700; font-size: 0.7rem; letter-spacing: 0.1em; padding: 4px 14px;
+    border-radius: 999px; margin-bottom: 12px; text-transform: uppercase;
+    border: 1px solid rgba(251,191,36,0.3);
   }
-  header h1 { margin: 0 0 4px; font-size: 1.6rem; }
-  header p { margin: 0; color: var(--muted); font-size: 0.85rem; }
-  .status-note { text-align: center; color: var(--muted); font-size: 0.78rem; margin: 10px 0 0; }
+  header h1 {
+    margin: 0; font-size: 1.9rem; font-weight: 800; line-height: 1.3;
+    font-family: 'Noto Sans Malayalam', sans-serif;
+    background: linear-gradient(90deg, #fde68a, #fbbf24, #f59e0b, #fbbf24, #fde68a);
+    background-size: 300% auto;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+    text-shadow: 0 0 30px rgba(251,191,36,0.25);
+  }
+  @keyframes shimmer { to { background-position: 300% center; } }
+  header .date { margin: 8px 0 0; font-size: 1rem; font-weight: 700; color: var(--text); font-family: 'Noto Sans Malayalam', sans-serif; }
+  header p.sub { margin: 6px 0 0; color: var(--muted); font-size: 0.85rem; font-family: 'Noto Sans Malayalam', sans-serif; }
+  .status-note { text-align: center; color: var(--muted); font-size: 0.75rem; margin: 12px 0 0; }
   .status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; margin-right: 5px; }
-  nav { display: flex; justify-content: center; gap: 8px; padding: 16px; flex-wrap: wrap; }
-  nav button {
-    padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border);
-    background: var(--card-bg); color: var(--text); font-size: 0.85rem; cursor: pointer;
+
+  .live-banner { max-width: 780px; margin: 16px auto 0; padding: 0 16px; }
+  .live-banner-inner {
+    background: linear-gradient(90deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05));
+    border: 1px solid rgba(239,68,68,0.35);
+    border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 12px;
+    overflow-x: auto;
   }
-  nav button.active { background: var(--accent); color: #1c1300; border-color: var(--accent); font-weight: 700; }
-  main { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  .live-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--live); flex-shrink: 0; animation: pulseDot 1.4s ease infinite; }
+  @keyframes pulseDot { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.6); } 70% { box-shadow: 0 0 0 8px rgba(239,68,68,0); } }
+  .live-items { display: flex; gap: 16px; white-space: nowrap; font-size: 0.85rem; }
+  .live-items b { color: var(--live); margin-right: 4px; }
+  .live-items .meta { color: var(--muted); font-size: 0.75rem; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 0 16px; }
+
+  .kalathilakam-card {
+    background: linear-gradient(135deg, rgba(251,191,36,0.18), rgba(217,119,6,0.08));
+    border: 1px solid rgba(251,191,36,0.4);
+    border-radius: 18px; padding: 20px; margin: 20px 0; text-align: center;
+    animation: fadeIn 0.6s ease;
+  }
+  .kalathilakam-card .icon { font-size: 2.2rem; }
+  .kalathilakam-card .title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); font-weight: 700; margin-top: 4px; }
+  .kalathilakam-card .name { font-size: 1.3rem; font-weight: 800; margin-top: 6px; }
+  .kalathilakam-card .details { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+  .kalathilakam-card .points { font-size: 1.5rem; font-weight: 800; color: var(--gold); margin-top: 6px; }
+
+  nav { display: flex; justify-content: center; gap: 8px; padding: 8px 0 18px; flex-wrap: wrap; }
+  nav button {
+    padding: 9px 18px; border-radius: 999px; border: 1px solid var(--card-border);
+    background: var(--card-bg); color: var(--text); font-size: 0.85rem; cursor: pointer;
+    font-family: 'Noto Sans Malayalam', 'Poppins', sans-serif; transition: all 0.2s;
+  }
+  nav button.active { background: var(--gold); color: #241a02; border-color: var(--gold); font-weight: 700; }
+
   .view { display: none; }
   .view.active { display: block; }
 
-  .house-card {
-    background: var(--card-bg); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
-    display: flex; align-items: center; gap: 14px; border-left: 6px solid var(--house-color, var(--accent));
-  }
-  .house-rank { font-size: 1.3rem; font-weight: 800; color: var(--muted); width: 28px; }
-  .house-info { flex: 1; }
-  .house-info .name { font-weight: 700; font-size: 1.05rem; }
-  .house-points { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+  .section-title { font-size: 0.95rem; font-weight: 700; margin: 18px 0 10px; color: var(--gold); font-family: 'Noto Sans Malayalam', sans-serif; }
 
-  .item-card { background: var(--card-bg); border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid var(--border); }
-  .item-top { display: flex; justify-content: space-between; align-items: center; }
-  .item-name { font-weight: 700; }
-  .item-type { color: var(--muted); font-size: 0.75rem; text-transform: capitalize; }
-  .badge-status { padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+  /* Venue cards (home) */
+  .venue-card { background: var(--card-bg); border-radius: 16px; margin-bottom: 14px; border: 1px solid var(--card-border); overflow: hidden; }
+  .venue-head { padding: 16px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .venue-head .left { flex: 1; }
+  .venue-head .vname { font-weight: 800; font-size: 1.1rem; font-family: 'Noto Sans Malayalam', sans-serif; }
+  .venue-head .vloc { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+  .venue-head .vlive { margin-top: 6px; font-size: 0.85rem; }
+  .venue-head .vlive.on { color: var(--live); font-weight: 700; }
+  .venue-head .vlive.off { color: var(--muted); }
+  .venue-head .chevron { font-size: 1.1rem; color: var(--muted); transition: transform 0.25s; flex-shrink: 0; }
+  .venue-card.expanded .chevron { transform: rotate(180deg); }
+  .venue-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; padding: 0 18px; }
+  .venue-card.expanded .venue-body { max-height: 2000px; padding: 0 18px 16px; }
+
+  .item-card { background: rgba(15,10,30,0.5); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; border: 1px solid var(--card-border); }
+  .item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .item-name { font-weight: 700; font-family: 'Noto Sans Malayalam', sans-serif; }
+  .item-meta { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+  .badge-row { display: flex; gap: 6px; flex-direction: column; align-items: flex-end; }
+  .badge-status { padding: 3px 10px; border-radius: 999px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
   .badge-status.live { background: rgba(239,68,68,0.15); color: var(--live); }
   .badge-status.finished { background: rgba(100,116,139,0.15); color: var(--finished); }
-  .badge-status.upcoming { background: rgba(59,130,246,0.15); color: var(--upcoming); }
-  .item-results { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.85rem; }
-  .item-results .res-row { display: flex; justify-content: space-between; padding: 3px 0; color: var(--muted); }
-  .item-results .res-row .pos { color: var(--accent); font-weight: 700; margin-right: 6px; }
+  .badge-status.upcoming { background: rgba(56,189,248,0.15); color: var(--upcoming); }
+  .badge-announced { padding: 2px 9px; border-radius: 999px; font-size: 0.65rem; font-weight: 600; white-space: nowrap; }
+  .badge-announced.yes { background: rgba(34,197,94,0.15); color: var(--announced); }
+  .badge-announced.no { background: rgba(148,163,184,0.15); color: var(--muted); }
 
-  .search-box {
-    width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
-    background: var(--card-bg); color: var(--text); font-size: 0.95rem; margin-bottom: 16px;
+  /* Scoreboard */
+  .house-card {
+    background: var(--card-bg); backdrop-filter: blur(6px);
+    border-radius: 16px; padding: 16px 18px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 14px;
+    border: 1px solid var(--card-border);
+    border-left: 6px solid var(--house-color, var(--gold));
   }
-  .search-section h3 { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 18px 0 8px; }
-  .search-row { background: var(--card-bg); border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.9rem; }
-  .search-row .sub { color: var(--muted); font-size: 0.78rem; }
+  .house-card.rank-0 { border-color: rgba(251,191,36,0.6); box-shadow: 0 0 24px rgba(251,191,36,0.25); animation: goldGlow 2.5s ease infinite; }
+  @keyframes goldGlow { 0%,100% { box-shadow: 0 0 18px rgba(251,191,36,0.2); } 50% { box-shadow: 0 0 30px rgba(251,191,36,0.4); } }
+  .rank-icon { font-size: 1.8rem; width: 40px; text-align: center; flex-shrink: 0; }
+  .rank-num { font-size: 1.2rem; font-weight: 800; color: var(--muted); width: 40px; text-align: center; flex-shrink: 0; }
+  .house-info { flex: 1; }
+  .house-info .name { font-weight: 700; font-size: 1.1rem; }
+  .house-points { font-size: 1.7rem; font-weight: 800; color: var(--gold); transition: transform 0.3s; }
+  .house-points.bump { animation: bump 0.5s ease; }
+  @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.3); color: #fde68a; } 100% { transform: scale(1); } }
+  .fade-in { animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Results page */
+  .category-block { margin-bottom: 26px; }
+  .category-heading {
+    font-size: 1.05rem; font-weight: 800; color: var(--gold); margin-bottom: 10px;
+    font-family: 'Noto Sans Malayalam', sans-serif;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 6px;
+  }
+  .result-item-card { background: var(--card-bg); border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; border: 1px solid var(--card-border); }
+  .result-item-name { font-weight: 700; margin-bottom: 8px; font-family: 'Noto Sans Malayalam', sans-serif; }
+  .podium-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 0.88rem; }
+  .podium-row .pos-icon { width: 26px; }
+  .podium-row .who { flex: 1; }
+  .podium-row .who .h { color: var(--muted); font-size: 0.75rem; }
+  .podium-row .pts { font-weight: 700; color: var(--gold); }
+  .no-result { color: var(--muted); font-size: 0.82rem; font-style: italic; }
+
   .empty { text-align: center; color: var(--muted); padding: 30px 0; }
 </style>
 </head>
@@ -91,42 +167,53 @@
 
 <header>
   <div class="badge">Live Results</div>
-  <h1>കലോൽസവം</h1>
-  <p>St. John The Baptist Roman Catholic Church, Manivila</p>
+  <h1>ഇടവകതല ബൈബിൾ കലോത്സവം 2026</h1>
+  <div class="date">സെപ്റ്റംബർ 20 &amp; 21</div>
+  <p class="sub">വി സ്നാപക യോഹന്നാൻ ദൈവാലയം മണിവിള</p>
   <div class="status-note"><span class="status-dot" id="statusDot"></span><span id="statusText">Connecting…</span></div>
 </header>
 
-<nav>
-  <button class="active" data-view="scoreboard">🏆 Scoreboard</button>
-  <button data-view="items">📋 Items</button>
-  <button data-view="search">🔍 Search</button>
-</nav>
+<div class="live-banner" id="liveBanner" style="display:none;">
+  <div class="live-banner-inner">
+    <span class="live-pulse"></span>
+    <div class="live-items" id="liveItemsRow"></div>
+  </div>
+</div>
 
 <main>
-  <div class="view active" id="view-scoreboard">
+  <div id="kalathilakamCard"></div>
+
+  <nav>
+    <button class="active" data-view="home">🏛️ Home</button>
+    <button data-view="scoreboard">🏆 Scoreboard</button>
+    <button data-view="results">🏅 Results</button>
+  </nav>
+
+  <div class="view active" id="view-home">
+    <div id="venueList"><div class="empty">Loading…</div></div>
+  </div>
+
+  <div class="view" id="view-scoreboard">
     <div id="scoreboardList"><div class="empty">Loading…</div></div>
   </div>
 
-  <div class="view" id="view-items">
-    <div id="itemsList"><div class="empty">Loading…</div></div>
-  </div>
-
-  <div class="view" id="view-search">
-    <input type="text" class="search-box" id="searchInput" placeholder="Search participant, house, or item…" />
-    <div id="searchResults"></div>
+  <div class="view" id="view-results">
+    <div id="resultsContent"><div class="empty">Loading…</div></div>
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // ---- CONFIG: replace with your Supabase project values ----
-  const SUPABASE_URL ='https://fkniwollsgqvpeklvmdc.supabase.co';
+  const SUPABASE_URL = "https://fkniwollsgqvpeklvmdc.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrbml3b2xsc2dxdnBla2x2bWRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDIzNDksImV4cCI6MjEwNTI3ODM0OX0._8hFmYoUpPru-I6D8LYeS-86O9nOQQ5IuXhmA5BgQN4";
   // -------------------------------------------------------------
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let houses = [], participants = [], items = [], results = [];
+  let houses = [], items = [], results = [], categories = [], venues = [];
+  let prevHousePoints = {};
+  let expandedVenues = new Set();
 
   const statusText = document.getElementById("statusText");
   const statusDot = document.getElementById("statusDot");
@@ -138,28 +225,34 @@
   }
 
   async function loadAll() {
-    const [h, p, i, r] = await Promise.all([
+    const [h, i, r, c, v] = await Promise.all([
       supabaseClient.from("houses").select("*"),
-      supabaseClient.from("participants").select("*"),
       supabaseClient.from("items").select("*"),
       supabaseClient.from("results").select("*"),
+      supabaseClient.from("categories").select("*"),
+      supabaseClient.from("venues").select("*"),
     ]);
     houses = h.data || [];
-    participants = p.data || [];
     items = i.data || [];
     results = r.data || [];
+    categories = c.data || [];
+    venues = v.data || [];
+
+    renderLiveBanner();
+    renderKalathilakam();
+    renderHome();
     renderScoreboard();
-    renderItems();
-    renderSearch();
+    renderResults();
   }
 
   function subscribeRealtime() {
     supabaseClient
       .channel("public:kalolsavam")
       .on("postgres_changes", { event: "*", schema: "public", table: "houses" }, loadAll)
-      .on("postgres_changes", { event: "*", schema: "public", table: "participants" }, loadAll)
       .on("postgres_changes", { event: "*", schema: "public", table: "items" }, loadAll)
       .on("postgres_changes", { event: "*", schema: "public", table: "results" }, loadAll)
+      .on("postgres_changes", { event: "*", schema: "public", table: "categories" }, loadAll)
+      .on("postgres_changes", { event: "*", schema: "public", table: "venues" }, loadAll)
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
           statusText.textContent = "Live — updates in real time";
@@ -171,100 +264,187 @@
       });
   }
 
-  function renderScoreboard() {
-    const totals = houses.map((house) => {
-      const points = results.filter((r) => r.house_id === house.id).reduce((sum, r) => sum + (r.points || 0), 0);
-      return { ...house, points };
-    }).sort((a, b) => b.points - a.points);
-
-    const el = document.getElementById("scoreboardList");
-    if (!totals.length) { el.innerHTML = '<div class="empty">No houses added yet.</div>'; return; }
-    el.innerHTML = totals.map((h, idx) => `
-      <div class="house-card" style="--house-color:${escapeHtml(h.color || '#f59e0b')}">
-        <div class="house-rank">${idx + 1}</div>
-        <div class="house-info"><div class="name">${escapeHtml(h.name)}</div></div>
-        <div class="house-points">${h.points}</div>
-      </div>
-    `).join("");
+  // ---------- Live banner ----------
+  function renderLiveBanner() {
+    const liveItems = items.filter((i) => i.status === "live");
+    const banner = document.getElementById("liveBanner");
+    const row = document.getElementById("liveItemsRow");
+    if (!liveItems.length) { banner.style.display = "none"; return; }
+    banner.style.display = "block";
+    row.innerHTML = liveItems.map((i) => {
+      const venue = venues.find((v) => v.id === i.venue_id);
+      return `<div><b>LIVE</b>${escapeHtml(i.name)}${venue ? ` <span class="meta">· ${escapeHtml(venue.name)}</span>` : ""}</div>`;
+    }).join("");
   }
 
-  function renderItems() {
-    const el = document.getElementById("itemsList");
-    if (!items.length) { el.innerHTML = '<div class="empty">No items added yet.</div>'; return; }
-    const order = { live: 0, upcoming: 1, finished: 2 };
-    const sorted = [...items].sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+  // ---------- Kalathilakam ----------
+  function renderKalathilakam() {
+    const el = document.getElementById("kalathilakamCard");
+    const totalsByKey = {};
+    results.forEach((r) => {
+      if (!r.participant_name) return;
+      const key = r.participant_name.trim().toLowerCase() + "|" + r.house_id;
+      if (!totalsByKey[key]) totalsByKey[key] = { name: r.participant_name, house_id: r.house_id, points: 0 };
+      totalsByKey[key].points += (r.points || 0);
+    });
+    const entries = Object.values(totalsByKey).sort((a, b) => b.points - a.points);
+    if (!entries.length) { el.innerHTML = ""; return; }
+    const top = entries[0];
+    const house = houses.find((h) => h.id === top.house_id);
+    el.innerHTML = `
+      <div class="kalathilakam-card">
+        <div class="icon">🏵️</div>
+        <div class="title">Kalathilakam</div>
+        <div class="name">${escapeHtml(top.name)}</div>
+        <div class="details">${house ? escapeHtml(house.name) : ""}</div>
+        <div class="points">${top.points} pts</div>
+      </div>
+    `;
+  }
 
-    el.innerHTML = sorted.map((item) => {
-      const itemResults = results.filter((r) => r.item_id === item.id).sort((a, b) => (a.position || 99) - (b.position || 99));
-      const resultsHtml = itemResults.length ? `
-        <div class="item-results">
-          ${itemResults.map((r) => {
-            const house = houses.find((h) => h.id === r.house_id);
-            const participant = participants.find((p) => p.id === r.participant_id);
-            const who = participant ? escapeHtml(participant.name) : (house ? escapeHtml(house.name) : "—");
-            const houseName = house ? escapeHtml(house.name) : "";
-            return `<div class="res-row">
-              <span>${r.position ? `<span class="pos">#${r.position}</span>` : ""}${who}${participant ? ` (${houseName})` : ""}</span>
-              <span>${r.points} pts</span>
-            </div>`;
-          }).join("")}
-        </div>
-      ` : "";
-      return `
-        <div class="item-card">
-          <div class="item-top">
-            <div>
-              <div class="item-name">${escapeHtml(item.name)}</div>
-              <div class="item-type">${escapeHtml(item.item_type)}</div>
+  // ---------- Home: venue cards ----------
+  function renderHome() {
+    const el = document.getElementById("venueList");
+
+    const sortedVenues = [...venues].sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+    const groups = sortedVenues.map((v) => ({
+      key: v.id,
+      name: v.name,
+      location: v.location,
+      landmark: v.landmark,
+      items: items.filter((i) => i.venue_id === v.id).sort((a, b) => (a.item_order ?? 0) - (b.item_order ?? 0)),
+    }));
+
+    const unassigned = items.filter((i) => !i.venue_id);
+    if (unassigned.length) {
+      groups.push({ key: "none", name: "പ്രോഗ്രാംസ്", location: null, landmark: null, items: unassigned });
+    }
+
+    if (!groups.length) { el.innerHTML = '<div class="empty">No venues added yet.</div>'; return; }
+
+    el.innerHTML = groups.map((g) => {
+      const liveItem = g.items.find((i) => i.status === "live");
+      const isExpanded = expandedVenues.has(g.key);
+      const metaLine = [g.location, g.landmark].filter(Boolean).map(escapeHtml).join(" · ");
+
+      const itemsHtml = g.items.length ? g.items.map((item) => {
+        const cat = categories.find((c) => c.id === item.category_id);
+        const hasResult = results.some((r) => r.item_id === item.id && [1, 2, 3].includes(r.position));
+        const announcedTag = item.status === "finished"
+          ? `<span class="badge-announced ${hasResult ? 'yes' : 'no'}">${hasResult ? 'Result announced' : 'Result announced soon'}</span>`
+          : "";
+        return `
+          <div class="item-card">
+            <div class="item-top">
+              <div>
+                <div class="item-name">${escapeHtml(item.name)}</div>
+                <div class="item-meta">${cat ? escapeHtml(cat.name) : "No category"}</div>
+              </div>
+              <div class="badge-row">
+                <span class="badge-status ${item.status}">${item.status}</span>
+                ${announcedTag}
+              </div>
             </div>
-            <span class="badge-status ${item.status}">${item.status}</span>
           </div>
-          ${resultsHtml}
+        `;
+      }).join("") : '<div class="empty">No programmes added yet.</div>';
+
+      return `
+        <div class="venue-card ${isExpanded ? 'expanded' : ''}" data-venue-key="${g.key}">
+          <div class="venue-head" onclick="toggleVenue('${g.key}')">
+            <div class="left">
+              <div class="vname">${escapeHtml(g.name)}</div>
+              ${metaLine ? `<div class="vloc">${metaLine}</div>` : ""}
+              <div class="vlive ${liveItem ? 'on' : 'off'}">${liveItem ? "🔴 Now: " + escapeHtml(liveItem.name) : "No live programme right now"}</div>
+            </div>
+            <div class="chevron">▾</div>
+          </div>
+          <div class="venue-body">${itemsHtml}</div>
         </div>
       `;
     }).join("");
   }
 
-  function renderSearch() {
-    const query = (document.getElementById("searchInput").value || "").trim().toLowerCase();
-    const el = document.getElementById("searchResults");
-    if (!query) { el.innerHTML = '<div class="empty">Start typing to search…</div>'; return; }
-
-    const matchedParticipants = participants.filter((p) => p.name.toLowerCase().includes(query));
-    const matchedHouses = houses.filter((h) => h.name.toLowerCase().includes(query));
-    const matchedItems = items.filter((i) => i.name.toLowerCase().includes(query));
-
-    let html = "";
-    if (matchedParticipants.length) {
-      html += `<div class="search-section"><h3>Participants</h3>`;
-      matchedParticipants.forEach((p) => {
-        const house = houses.find((h) => h.id === p.house_id);
-        const pts = results.filter((r) => r.participant_id === p.id).reduce((s, r) => s + r.points, 0);
-        html += `<div class="search-row"><strong>${escapeHtml(p.name)}</strong>
-          <div class="sub">${house ? escapeHtml(house.name) : "No house"}${p.category ? " · " + escapeHtml(p.category) : ""} · ${pts} pts total</div></div>`;
-      });
-      html += `</div>`;
-    }
-    if (matchedHouses.length) {
-      html += `<div class="search-section"><h3>Houses</h3>`;
-      matchedHouses.forEach((h) => {
-        const pts = results.filter((r) => r.house_id === h.id).reduce((s, r) => s + r.points, 0);
-        html += `<div class="search-row"><strong>${escapeHtml(h.name)}</strong><div class="sub">${pts} total points</div></div>`;
-      });
-      html += `</div>`;
-    }
-    if (matchedItems.length) {
-      html += `<div class="search-section"><h3>Items</h3>`;
-      matchedItems.forEach((i) => {
-        html += `<div class="search-row"><strong>${escapeHtml(i.name)}</strong><div class="sub">${escapeHtml(i.item_type)} · ${escapeHtml(i.status)}</div></div>`;
-      });
-      html += `</div>`;
-    }
-    if (!html) html = '<div class="empty">No matches found.</div>';
-    el.innerHTML = html;
+  function toggleVenue(key) {
+    if (expandedVenues.has(key)) expandedVenues.delete(key);
+    else expandedVenues.add(key);
+    renderHome();
   }
 
-  document.getElementById("searchInput").addEventListener("input", renderSearch);
+  // ---------- Scoreboard ----------
+  function renderScoreboard() {
+    const container = document.getElementById("scoreboardList");
+    const totals = houses.map((house) => {
+      const points = results.filter((r) => r.house_id === house.id).reduce((sum, r) => sum + (r.points || 0), 0);
+      return { ...house, points };
+    }).sort((a, b) => b.points - a.points);
+
+    if (!totals.length) { container.innerHTML = '<div class="empty">No houses added yet.</div>'; return; }
+
+    const rankIcons = ["👑", "🥈", "🥉"];
+    container.innerHTML = totals.map((h, idx) => {
+      const changed = prevHousePoints[h.id] !== undefined && prevHousePoints[h.id] !== h.points;
+      const icon = rankIcons[idx];
+      return `
+        <div class="house-card fade-in ${idx < 3 ? 'rank-' + idx : ''}" data-house-id="${h.id}" style="--house-color:${escapeHtml(h.color || '#f59e0b')}">
+          ${icon ? `<div class="rank-icon">${icon}</div>` : `<div class="rank-num">${idx + 1}</div>`}
+          <div class="house-info"><div class="name">${escapeHtml(h.name)}</div></div>
+          <div class="house-points ${changed ? 'bump' : ''}">${h.points}</div>
+        </div>
+      `;
+    }).join("");
+
+    totals.forEach((h) => { prevHousePoints[h.id] = h.points; });
+  }
+
+  // ---------- Results page ----------
+  function renderResults() {
+    const el = document.getElementById("resultsContent");
+    const catMap = new Map();
+    categories.forEach((c) => catMap.set(c.id, []));
+    catMap.set("none", []);
+
+    items.forEach((item) => {
+      const key = item.category_id && catMap.has(item.category_id) ? item.category_id : "none";
+      catMap.get(key).push(item);
+    });
+
+    const posIcon = { 1: "🥇", 2: "🥈", 3: "🥉" };
+    let html = "";
+    const orderedCatIds = [...categories.map((c) => c.id), "none"];
+
+    orderedCatIds.forEach((catId) => {
+      const catItems = catMap.get(catId) || [];
+      if (!catItems.length) return;
+      const catName = catId === "none" ? "General" : (categories.find((c) => c.id === catId)?.name || "General");
+
+      html += `<div class="category-block"><div class="category-heading">${escapeHtml(catName)}</div>`;
+
+      catItems.forEach((item) => {
+        const itemResults = results.filter((r) => r.item_id === item.id && [1, 2, 3].includes(r.position)).sort((a, b) => a.position - b.position);
+        html += `<div class="result-item-card"><div class="result-item-name">${escapeHtml(item.name)}</div>`;
+        if (!itemResults.length) {
+          html += `<div class="no-result">Result not yet announced</div>`;
+        } else {
+          itemResults.forEach((r) => {
+            const house = houses.find((h) => h.id === r.house_id);
+            html += `
+              <div class="podium-row">
+                <div class="pos-icon">${posIcon[r.position] || r.position}</div>
+                <div class="who">${r.participant_name ? escapeHtml(r.participant_name) : (house ? escapeHtml(house.name) : "—")}${r.participant_name && house ? `<div class="h">${escapeHtml(house.name)}</div>` : ""}</div>
+                <div class="pts">${r.points} pts</div>
+              </div>
+            `;
+          });
+        }
+        html += `</div>`;
+      });
+
+      html += `</div>`;
+    });
+
+    el.innerHTML = html || '<div class="empty">No results yet.</div>';
+  }
 
   document.querySelectorAll("nav button").forEach((btn) => {
     btn.addEventListener("click", () => {
